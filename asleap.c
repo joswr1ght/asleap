@@ -1395,8 +1395,8 @@ int main(int argc, char *argv[])
 	char *device, dictfile[255], dictidx[255], pcapfile[255];
 	struct asleap_data asleap;
 	struct stat dictstat, capturedatastat;
-	int findleaptimeout = 5;
 	unsigned int findlpexchret = 0;
+	int findleaptimeout = 0;
 	int ret=0;
 	extern int success;
 
@@ -1605,7 +1605,7 @@ int main(int argc, char *argv[])
 
 	while (1) {
 	
-		 findlpexchret = findlpexch(&asleap, 0, offset);
+		 findlpexchret = findlpexch(&asleap, findleaptimeout, offset);
 	
 		 if (findlpexchret == LEAPEXCHFOUND) {
 			 printf("\nCaptured LEAP exchange information:\n");
