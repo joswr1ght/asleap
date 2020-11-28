@@ -44,29 +44,29 @@
  * Copyright (C) 2001 Jochen Eisinger, University of Freiburg
  */
 
-#define hex2int(c)	((((c) >= '0') && ((c) <= '9')) ? ((c) - '0') : \
-			((((c) >= 'A') && ((c) <= 'F')) ? ((c) - 'A' + 10) : \
-			((c) - 'a' + 10)))
+#define hex2int(c)  ((((c) >= '0') && ((c) <= '9')) ? ((c) - '0') : \
+            ((((c) >= 'A') && ((c) <= 'F')) ? ((c) - 'A' + 10) : \
+            ((c) - 'a' + 10)))
 
 /* GetCharArray:
- * 	Convert ASCII String to binary
+ *  Convert ASCII String to binary
  */
 void getchararray(char *s, unsigned char *a)
 {
 
-	int i, w, len;
+    int i, w, len;
 
-	len = strlen(s);
+    len = strlen(s);
 
-	for (i = 0; i < len; i += 2) {
+    for (i = 0; i < len; i += 2) {
 
-		w = hex2int(s[i]);
-		w <<= 4;
-		w += hex2int(s[i + 1]);
+        w = hex2int(s[i]);
+        w <<= 4;
+        w += hex2int(s[i + 1]);
 
-		a[i >> 1] = w;
+        a[i >> 1] = w;
 
-	}
+    }
 
 }
 
@@ -75,10 +75,10 @@ void getchararray(char *s, unsigned char *a)
  */
 void PutCharArray(unsigned char *a, int c)
 {
-	char hexcode[] = "0123456789abcdef";
-	int i;
-	for (i = 0; i < c; i++)
-		printf("%c%c", hexcode[a[i] >> 4], hexcode[a[i] & 15]);
+    char hexcode[] = "0123456789abcdef";
+    int i;
+    for (i = 0; i < c; i++)
+        printf("%c%c", hexcode[a[i] >> 4], hexcode[a[i] & 15]);
 }
 
 /*
@@ -88,42 +88,42 @@ void PutCharArray(unsigned char *a, int c)
  */
 int string_to_mac(char *string, unsigned int *mac_buf)
 {
-	char *ptr, *next;
-	unsigned long val;
-	int i;
+    char *ptr, *next;
+    unsigned long val;
+    int i;
 
-	to_upper(string);
+    to_upper(string);
 
-	ptr = next = string;
-	for (i = 0; i < 6; i++) {
-		if ((val = strtoul(next, &ptr, 16)) > 255) {
-			errno = EINVAL;
-			return (-1);
-		}
-		mac_buf[i] = (unsigned int)val;
-		if ((next == ptr) && (i != 6 - 1)) {
-			errno = EINVAL;
-			return (-1);
-		}
-		next = ptr + 1;
-	}
+    ptr = next = string;
+    for (i = 0; i < 6; i++) {
+        if ((val = strtoul(next, &ptr, 16)) > 255) {
+            errno = EINVAL;
+            return (-1);
+        }
+        mac_buf[i] = (unsigned int)val;
+        if ((next == ptr) && (i != 6 - 1)) {
+            errno = EINVAL;
+            return (-1);
+        }
+        next = ptr + 1;
+    }
 
-	return (1);
+    return (1);
 }
 
 void NtPasswordHash(char *secret, int secret_len, unsigned char *hash)
 {
 
-	int i;
-	unsigned char unicodePassword[MAX_NT_PASSWORD * 2];
+    int i;
+    unsigned char unicodePassword[MAX_NT_PASSWORD * 2];
 
-	/* Initialize the Unicode version of the secret (== password). */
-	/* This implicitly supports 8-bit ISO8859/1 characters. */
-	memset(unicodePassword, 0, sizeof(unicodePassword));
+    /* Initialize the Unicode version of the secret (== password). */
+    /* This implicitly supports 8-bit ISO8859/1 characters. */
+    memset(unicodePassword, 0, sizeof(unicodePassword));
 
-	for (i = 0; i < secret_len; i++)
-		unicodePassword[i * 2] = (unsigned char)secret[i];
+    for (i = 0; i < secret_len; i++)
+        unicodePassword[i * 2] = (unsigned char)secret[i];
 
-	/* Unicode is 2 bytes per char */
-	MD4WRAP(unicodePassword, secret_len * 2, hash);
+    /* Unicode is 2 bytes per char */
+    MD4WRAP(unicodePassword, secret_len * 2, hash);
 }

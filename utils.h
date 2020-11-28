@@ -29,7 +29,7 @@ void MakeKey(unsigned char *key, unsigned char *des_key);
 void Expand(unsigned char *in, unsigned char *out);
 void Collapse(unsigned char *in, unsigned char *out);
 void DesEncrypt(unsigned char *clear, unsigned char *key,
-		unsigned char *cipher);
+        unsigned char *cipher);
 int IsBlank(char *s);
 char *printmac(unsigned char *mac);
 int str2hex (char *string, uint8_t *hexstr, int len);

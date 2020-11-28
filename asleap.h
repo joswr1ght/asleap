@@ -23,7 +23,7 @@
 
 /* These offsets follow start at the beginning of the IP Header */
 //#define GREOFFSET   20
-#define IPHDRLEN   20		/* Not always constant, but usually */
+#define IPHDRLEN   20       /* Not always constant, but usually */
 #define GREMINHDRLEN 8
 #define GRESYNSETFLAG 0x0010
 #define GREACKSETFLAG 0x8000
@@ -45,33 +45,33 @@
    configuration information and packet capture results.  Such is the result
    of poor planning in the initial design. */
 struct asleap_data {
-	char username[256 + 1];
-	uint8_t eapid;
-	uint8_t challenge[8];
-	uint8_t response[24];
-	uint8_t endofhash[2];
-	char password[32];
-	uint8_t nthash[16];
-	/* for PPTP/true MS-CHAPv2 */
-	uint8_t pptpauthchal[16];
-	uint8_t pptppeerchal[16];
+    char username[256 + 1];
+    uint8_t eapid;
+    uint8_t challenge[8];
+    uint8_t response[24];
+    uint8_t endofhash[2];
+    char password[32];
+    uint8_t nthash[16];
+    /* for PPTP/true MS-CHAPv2 */
+    uint8_t pptpauthchal[16];
+    uint8_t pptppeerchal[16];
 //    uint8_t    pptpchal[8];
 //    uint8_t    pptppeerresp[24];
 
-	int eapsuccess;
-	int skipeapsuccess;	/* Don't bother checking for success after auth */
-	int verbose;
-	char dictfile[255];
-	char dictidx[255];
-	char wordfile[255];
+    int eapsuccess;
+    int skipeapsuccess; /* Don't bother checking for success after auth */
+    int verbose;
+    char dictfile[255];
+    char dictidx[255];
+    char wordfile[255];
 
-	/* Tracking values */
-	uint8_t leapchalfound;
-	uint8_t leaprespfound;
-	uint8_t leapsuccessfound;
-	uint8_t pptpchalfound;
-	uint8_t pptprespfound;
-	uint8_t pptpsuccessfound;
-	uint8_t manualchalresp;
+    /* Tracking values */
+    uint8_t leapchalfound;
+    uint8_t leaprespfound;
+    uint8_t leapsuccessfound;
+    uint8_t pptpchalfound;
+    uint8_t pptprespfound;
+    uint8_t pptpsuccessfound;
+    uint8_t manualchalresp;
 };
 

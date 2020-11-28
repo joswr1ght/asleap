@@ -16,4 +16,4 @@
  * GNU General Public License for more details.
  */
 
-#define VER "2.2"
+#define VER "2.3"
