@@ -7,13 +7,14 @@
 # <dragorn> i think thats all anyone does
 # <dragorn> make is a twisted beast
 ##################################
-LDLIBS		= -lpcap -lcrypt
-CFLAGS		= -pipe -Wall -D_LINUX -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -I../../..
-CFLAGS		+= -D_OPENSSL_MD4
+LDLIBS		= -lpcap -lxcrypt
+CFLAGS		= -pipe -Wall -D_LINUX -D_OPENSSL_MD4
 LDLIBS		+= -lcrypto
-CFLAGS		+= -g3 -ggdb -g
+CFLAGS		+= -g3 #-ggdb -g
 PROGOBJ		= asleap.o genkeys.o utils.o common.o sha1.o
 PROG		= asleap genkeys
+#CC		    = clang-10
+CC          = gcc
 
 all: $(PROG) $(PROGOBJ)
 
