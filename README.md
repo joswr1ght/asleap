@@ -12,7 +12,7 @@ restore functionality. Minor code cleanup.
 
 Minor update to fix a problem with IFNAMSIZ errors in build on some platforms.
 
-UDPATE - 2007-7-13
+## UPDATE - 2007-7-13
 
 I updated asleap to include the "-C" and "-W" options, where you can specify
 the challenge value (in colon-delimited bytes) and the response (ditto) on the
@@ -23,28 +23,29 @@ tool, which is fine by me.
 
 I spent some time updating asleap and came to the following conclusions:
 
-    + My code is much better now than it was in 2003/2004
-    + I was (something stupid I wrote in 2007)
++ My code is much better now than it was in 2003/2004
++ I was (something stupid I wrote in 2007)
 
 I removed a lot of functionality that I didn't think was necessary any more in
 this version, specifically:
 
-    + No more support for Airopeek NX files; if you want to read from a .apc
++ No more support for Airopeek NX files; if you want to read from a .apc
       file, install Wireshark, and run "tshark -r input.apc -w output.dump"
       to convert to libpcap format.
-    + No more integration with Airjack to deauth users.  If you still want
++ No more integration with Airjack to deauth users.  If you still want
       to deauth users to get their LEAP credentials without waiting, you
       can use a tool such as file2air, MDK2 or aireplay-ng.
-    + I stopped caring about Windows a long time ago.  If you need this,
++ I stopped caring about Windows a long time ago.  If you need this,
       and you only run Windows, try using a bootable Linux ISO like
       Backtrack (www.remote-exploit.org) and VMWare.
 
 On the brighter side:
-    + The code has 90% less teh suck
-    + Fixed an awful bug where passwords > 64 characters caused genkeys
-      to segfault.
-    + Added code to handle QoS data frames
-    + Can handle radiotap-formatted capture files now
+
++ The code has 90% less teh suck
++ Fixed an awful bug where passwords > 64 characters caused genkeys
+  to segfault.
++ Added code to handle QoS data frames
++ Can handle radiotap-formatted capture files now
 
 ## INTRO
 
