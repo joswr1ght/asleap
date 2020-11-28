@@ -1,11 +1,14 @@
-asleap - recovers weak LEAP password.  Pronounced "asleep".
+# asleap - recovers weak LEAP and PPTP passwords
 
-Copyright(c) 2004-2008, Joshua Wright <jwright@hasborg.com>
+Pronounced "asleep". Copyright(c) 2004-2020, [Joshua Wright](https://github.com/joswr1ght)
 
-$Id: README,v 1.10 2007/05/10 19:29:06 jwright Exp $
+-------------------------------------------------------------------------------
+## UPDATE - 2020-11-28
 
---------------------------------------------------------------------------------
-UPDATE - 2008-5-28
+Due to GLIBC removal of setkey and crypt functions, link to libxcrypt to
+restore functionality. Minor code cleanup.
+
+## UPDATE - 2008-5-28
 
 Minor update to fix a problem with IFNAMSIZ errors in build on some platforms.
 
@@ -16,43 +19,36 @@ the challenge value (in colon-delimited bytes) and the response (ditto) on the
 command-line.  This makes asleap more of a generic MS-CHAPv2 dictionary attack
 tool, which is fine by me.
 
-Why did I do this?  Because Jay "F***ing" Beale asked me to.  Nicely.
-
-UPDATE - 2007-5-10
+## UPDATE - 2007-5-10
 
 I spent some time updating asleap and came to the following conclusions:
 
-	+ My code is much better now than it was in 2003/2004
-	+ I was smoking crack when I wrote this the first time
+    + My code is much better now than it was in 2003/2004
+    + I was (something stupid I wrote in 2007)
 
-I removed a lot of functionality that I didnt't think was necessary any more in
+I removed a lot of functionality that I didn't think was necessary any more in
 this version, specifically:
 
-	+ No more support for Airopeek NX files; if you want to read from a .apc
-	  file, install Wireshark, and run "tshark -r input.apc -w output.dump"
-	  to convert to libpcap format.
-	+ No more integration with Airjack to deauth users.  If you still want
-	  to deauth users to get their LEAP credentials without waiting, you
-	  can use a tool such as file2air, MDK2 or aireplay-ng.
-	+ I stopped caring about Windows a long time ago.  If you need this,
-	  and you only run Windows, try using a bootable Linux ISO like
-  	  Backtrack (www.remote-exploit.org) and VMWare.
+    + No more support for Airopeek NX files; if you want to read from a .apc
+      file, install Wireshark, and run "tshark -r input.apc -w output.dump"
+      to convert to libpcap format.
+    + No more integration with Airjack to deauth users.  If you still want
+      to deauth users to get their LEAP credentials without waiting, you
+      can use a tool such as file2air, MDK2 or aireplay-ng.
+    + I stopped caring about Windows a long time ago.  If you need this,
+      and you only run Windows, try using a bootable Linux ISO like
+      Backtrack (www.remote-exploit.org) and VMWare.
 
 On the brighter side:
-	+ The code has 90% less teh suck
-	+ Fixed an awful bug where passwords > 64 characters caused genkeys
-	  to segfault.
-	+ Added code to handle QoS data frames
-	+ Can handle radiotap-formatted capture files now
+    + The code has 90% less teh suck
+    + Fixed an awful bug where passwords > 64 characters caused genkeys
+      to segfault.
+    + Added code to handle QoS data frames
+    + Can handle radiotap-formatted capture files now
 
-NB: The code to handle QoS data frames isn't tested.  Why you ask?  Because Zero_Chaos didn't send me the packet capture I asked for. pfppbbbbbbb
+## INTRO
 
-What follows is the original README.  Please contact me with any questions,
-comments or QoS LEAP transactions.  jwright@hasborg.com
-
---
-INTRO
-
+```
 This tool is released as a proof-of-concept to demonstrate weaknesses in
 the LEAP and PPTP protocols.
 
@@ -206,10 +202,10 @@ genkeys 2.0 - generates lookup file for asleap. <jwright@hasborg.com>
 genkeys: Must supply -r -f and -n
 Usage: genkeys [options]
 
-	-r 	Input dictionary file, one word per line
-	-f 	Output pass+hash filename
-	-n 	Output index filename
-	-h 	Last 2 hash bytes to filter with (optional)
+    -r  Input dictionary file, one word per line
+    -f  Output pass+hash filename
+    -n  Output index filename
+    -h  Last 2 hash bytes to filter with (optional)
 $
 
 I typically use .dat and .idx extensions on the database ("outfile") and
@@ -226,15 +222,15 @@ asleap 2.0 - actively recover LEAP/PPTP passwords. <jwright@hasborg.com>
 asleap: Must supply an interface with -i, or a stored file with -r
 Usage: asleap [options]
 
-	-r 	Read from a libpcap file
-	-i 	Interface to capture on
-	-f 	Dictionary file with NT hashes
-	-n 	Index file for NT hashes
-	-s 	Skip the check to make sure authentication was successful
-	-h 	Output this help information and exit
-	-v 	Print verbose information (more -v for more verbosity)
-	-V 	Print program version and exit
-	-W 	ASCII dictionary file (special purpose)
+    -r  Read from a libpcap file
+    -i  Interface to capture on
+    -f  Dictionary file with NT hashes
+    -n  Index file for NT hashes
+    -s  Skip the check to make sure authentication was successful
+    -h  Output this help information and exit
+    -v  Print verbose information (more -v for more verbosity)
+    -V  Print program version and exit
+    -W  ASCII dictionary file (special purpose)
 $
 
 
@@ -269,6 +265,4 @@ or switch to a more secure authentication mechanism such as IPSec or L2TP.
 QUESTIONS, COMMENTS, CONCERNS
 
 Please contact jwright@hasborg.com with any questions, comments on concerns.
-My PGP key is located at http://802.11ninja.net/~jwright/pgpkey.html
-
-
+```
