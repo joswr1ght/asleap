@@ -7,8 +7,9 @@
 # <dragorn> i think thats all anyone does
 # <dragorn> make is a twisted beast
 ##################################
-CFLAGS		= -g3 -Og -Wall
-CPPFLAGS	=
+CFLAGS		= -g3 -Og -std=gnu11 \
+		  -Wall -Wextra -Wpedantic -Wstrict-prototypes
+CPPFLAGS	= -D_FILE_OFFSET_BITS=64
 LDLIBS		= -lpcap
 
 PROG		= asleap genkeys

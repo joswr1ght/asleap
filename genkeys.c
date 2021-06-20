@@ -37,16 +37,15 @@ unsigned long long sortcount;
 
 int compfunc(const void *x, const void *y)
 {
-
-    struct hashpass_rec rec1, rec2;
+    const struct hashpass_rec *rec1, *rec2;
 
     sortcount++;
-    rec1 = (struct hashpass_rec)(*(struct hashpass_rec *)x);
-    rec2 = (struct hashpass_rec)(*(struct hashpass_rec *)y);
+    rec1 = (const struct hashpass_rec *)x;
+    rec2 = (const struct hashpass_rec *)y;
 
-    if (rec1.hash[15] == rec2.hash[15]) {
+    if (rec1->hash[15] == rec2->hash[15]) {
         return (0);
-    } else if (rec1.hash[15] < rec2.hash[15]) {
+    } else if (rec1->hash[15] < rec2->hash[15]) {
         return (-1);
     } else {
         return (1);
