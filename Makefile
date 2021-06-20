@@ -12,7 +12,7 @@ CPPFLAGS	=
 LDLIBS		= -lpcap
 
 PROG		= asleap genkeys
-COMMON_OBJS	= common.o md4.o sha1.o utils.o
+COMMON_OBJS	= common.o des.o des-tables.o md4.o sha1.o utils.o
 
 all: $(PROG)
 
@@ -25,6 +25,8 @@ genkeys: genkeys.o $(COMMON_OBJS)
 asleap.o: asleap.c asleap.h utils.h common.h version.h sha1.h radiotap.h \
  byteswap.h ieee80211.h ieee8021x.h ietfproto.h
 common.o: common.c common.h utils.h md4.h
+des.o: des.c des.h
+des-tables.o: des-tables.c des.h
 genkeys.o: genkeys.c common.h version.h utils.h
 sha1.o: sha1.c common.h sha1.h
 md4.o: md4.c md4.h
