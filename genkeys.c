@@ -219,14 +219,12 @@ int main(int argc, char *argv[])
             password[strlen(password) - 1] = 0;
         }
 
-#ifndef _OPENSSL_MD4
         /* md4.c seems to have a problem with passwords longer than 31 bytes.
            This seems odd to me, but it should have little impact on our
            final product, since I assume there are few passwords we will be
            able to identify with a dictionary attack that are longer than 31
            bytes. */
         password[31] = 0;
-#endif
 
         NtPasswordHash(password, strlen(password), pwhash);
 

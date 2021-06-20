@@ -26,19 +26,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+
 #include "common.h"
 #include "utils.h"
-
-#ifdef _OPENSSL_MD4
-#include <openssl/md4.h>
-#define MD4Init MD4_Init
-#define MD4Update MD4_Update
-#define MD4Final MD4_Final
-#define MD4WRAP MD4
-#else
 #include "md4.h"
-#define MD4WRAP md4
-#endif
 
 /* written from scratch
  * Copyright (C) 2001 Jochen Eisinger, University of Freiburg
@@ -125,5 +116,5 @@ void NtPasswordHash(char *secret, int secret_len, unsigned char *hash)
         unicodePassword[i * 2] = (unsigned char)secret[i];
 
     /* Unicode is 2 bytes per char */
-    MD4WRAP(unicodePassword, secret_len * 2, hash);
+    md4(unicodePassword, secret_len * 2, hash);
 }
