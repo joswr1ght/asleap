@@ -37,16 +37,15 @@ unsigned long long sortcount;
 
 int compfunc(const void *x, const void *y)
 {
-
-    struct hashpass_rec rec1, rec2;
+    const struct hashpass_rec *rec1, *rec2;
 
     sortcount++;
-    rec1 = (struct hashpass_rec)(*(struct hashpass_rec *)x);
-    rec2 = (struct hashpass_rec)(*(struct hashpass_rec *)y);
+    rec1 = (const struct hashpass_rec *)x;
+    rec2 = (const struct hashpass_rec *)y;
 
-    if (rec1.hash[15] == rec2.hash[15]) {
+    if (rec1->hash[15] == rec2->hash[15]) {
         return (0);
-    } else if (rec1.hash[15] < rec2.hash[15]) {
+    } else if (rec1->hash[15] < rec2->hash[15]) {
         return (-1);
     } else {
         return (1);
@@ -219,14 +218,12 @@ int main(int argc, char *argv[])
             password[strlen(password) - 1] = 0;
         }
 
-#ifndef _OPENSSL_MD4
         /* md4.c seems to have a problem with passwords longer than 31 bytes.
            This seems odd to me, but it should have little impact on our
            final product, since I assume there are few passwords we will be
            able to identify with a dictionary attack that are longer than 31
            bytes. */
         password[31] = 0;
-#endif
 
         NtPasswordHash(password, strlen(password), pwhash);
 

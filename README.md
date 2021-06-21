@@ -3,6 +3,13 @@
 Pronounced "asleep". Copyright(c) 2004-2020, [Joshua Wright](https://github.com/joswr1ght)
 
 -------------------------------------------------------------------------------
+## UPDATE - 2021-06-20
+
+Due to setkey and encrypt being slated to be removed from libxcrypt as
+well, bundle our own DES implementation.  Also use our existing
+bundled MD4 implementation on all operating systems, rather than
+depending on OpenSSL.
+
 ## UPDATE - 2020-11-28
 
 Due to GLIBC removal of setkey and crypt functions, link to libxcrypt to

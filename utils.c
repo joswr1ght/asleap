@@ -27,13 +27,14 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdint.h>
-#include <crypt.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <netinet/in.h>     /* for ntohs() */
 #include <errno.h>
 #include <sys/types.h>
+
 #include "utils.h"
+#include "des.h"
 
 void lamont_hdump(unsigned char *bp, unsigned int length);
 char *printmac(unsigned char *mac);
@@ -134,53 +135,15 @@ void MakeKey(unsigned char *key, unsigned char *des_key)
 
 }
 
-/* in == 8-byte string (expanded version of the 56-bit key)
- * out == 64-byte string where each byte is either 1 or 0
- * Note that the low-order "bit" is always ignored by by setkey()
- */
-void Expand(unsigned char *in, unsigned char *out)
-{
-    int j, c;
-    int i;
-
-    for (i = 0; i < 64; in++) {
-        c = *in;
-        for (j = 7; j >= 0; j--)
-            *out++ = (c >> j) & 1;
-        i += 8;
-    }
-}
-
-/* The inverse of Expand
- */
-void Collapse(unsigned char *in, unsigned char *out)
-{
-    int j;
-    int i;
-    unsigned int c;
-
-    for (i = 0; i < 64; i += 8, out++) {
-        c = 0;
-        for (j = 7; j >= 0; j--, in++)
-            c |= *in << j;
-        *out = c & 0xff;
-    }
-}
-
 void DesEncrypt(unsigned char *clear, unsigned char *key, unsigned char *cipher)
 {
     unsigned char des_key[8];
-    unsigned char crypt_key[66];
-    unsigned char des_input[66];
+    struct des_ctx ctx;
 
     MakeKey(key, des_key);
-
-    Expand(des_key, crypt_key);
-    setkey((char *)crypt_key);
-
-    Expand(clear, des_input);
-    encrypt((char *)des_input, 0);
-    Collapse(des_input, cipher);
+    des_set_salt(&ctx, 0);
+    des_set_key(&ctx, des_key);
+    des_crypt_block(&ctx, clear, cipher, 1, false);
 }
 
 int IsBlank(char *s)

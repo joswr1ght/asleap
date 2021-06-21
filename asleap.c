@@ -72,14 +72,14 @@ unsigned long pcount=0;
 
 /* prototypes */
 void usage(char *message);
-void cleanup();
+void cleanup(void);
 void print_leapexch(struct asleap_data *asleap_ptr);
 void print_hashlast2(struct asleap_data *asleap_ptr);
 void print_leappw(struct asleap_data *asleap_ptr);
 int gethashlast2(struct asleap_data *asleap_ptr);
 int getmschappw(struct asleap_data *asleap_ptr);
 int getpacket(pcap_t *p);
-int listdevs();
+int listdevs(void);
 int testleapchal(struct asleap_data *asleap_ptr, int plen, int offset);
 int testleapsuccess(struct asleap_data *asleap_ptr, int plen, int offset);
 int testleapresp(struct asleap_data *asleap_ptr, int plen, int offset);
@@ -235,7 +235,7 @@ void print_leappw(struct asleap_data *asleap_ptr)
 
 }
 
-void cleanup()
+void cleanup(void)
 {
 
     if (p != NULL) {
@@ -352,7 +352,7 @@ int getmschappw(struct asleap_data *asleap_ptr)
     struct hashpass_rec rec;
     struct hashpassidx_rec idxrec;
     char password_buf[MAX_NT_PASSWORD];
-    int passlen, recordlength, passwordlen, i;
+    int passlen, recordlength, passwordlen;
     FILE *buffp, *idxfp;
 
     /* If the user passed an index file for our reference, fseek to
@@ -449,7 +449,7 @@ int getmschappw(struct asleap_data *asleap_ptr)
             return (-1);
         }
 
-        for (i = 0; i < idxrec.numrec; i++) {
+        for (size_t i = 0; i < idxrec.numrec; i++) {
 
             memset(&rec, 0, sizeof(rec));
             memset(&password_buf, 0, sizeof(password_buf));
@@ -1029,7 +1029,7 @@ int testpptpchal(struct asleap_data *asleap_ptr, int plen, int offset)
 
 int testpptpresp(struct asleap_data *asleap_ptr, int plen, int offset)
 {
-    int usernamelen;
+    unsigned long usernamelen;
     struct pppchaphdr *pppchap;
 
     pppchap = (struct pppchaphdr *)(packet+offset);
@@ -1324,7 +1324,7 @@ char *getdevice(char *optarg)
 }
 
 /* List all the available interfaces, adapted from WinDump code */
-int listdevs()
+int listdevs(void)
 {
 
     pcap_if_t *devpointer;
@@ -1353,7 +1353,7 @@ int radiotap_offset(pcap_t *p, struct pcap_pkthdr *h)
 {
 
     struct ieee80211_radiotap_header *rtaphdr;
-    int rtaphdrlen=0;
+    uint32_t rtaphdrlen=0;
 
     /* Grab a packet to examine radiotap header */
     if (pcap_next_ex(p, &h, (const u_char **)&packet) > -1) {
@@ -1376,7 +1376,8 @@ int radiotap_offset(pcap_t *p, struct pcap_pkthdr *h)
 int main(int argc, char *argv[])
 {
 
-    int c, opt_verbose = 0, offset = 0;
+    int c, opt_verbose = 0;
+    size_t offset = 0;
     char *device, dictfile[255], dictidx[255], pcapfile[255];
     struct asleap_data asleap;
     struct stat dictstat, capturedatastat;
@@ -1391,9 +1392,9 @@ int main(int argc, char *argv[])
     memset(&asleap, 0, sizeof(asleap));
     device = NULL;
 
-    signal(SIGINT, cleanup);
-    signal(SIGTERM, cleanup);
-    signal(SIGQUIT, cleanup);
+    signal(SIGINT, (void (*)(int))cleanup);
+    signal(SIGTERM, (void (*)(int))cleanup);
+    signal(SIGQUIT, (void (*)(int))cleanup);
 
     printf("asleap %s - actively recover LEAP/PPTP passwords. "
            "<jwright@hasborg.com>\n", VER);
@@ -1559,7 +1560,7 @@ int main(int argc, char *argv[])
         offset = radiotap_offset(p, &h);
         if (offset < sizeof(struct ieee80211_radiotap_header)) {
             fprintf(stderr, "Unable to determine offset "
-                "from radiotap header (%d).\n", offset);
+                "from radiotap header (%zd).\n", offset);
             return(-1);
         }
         break;
