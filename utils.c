@@ -33,6 +33,8 @@
 #include <netinet/in.h>     /* for ntohs() */
 #include <errno.h>
 #include <sys/types.h>
+#include <openssl/evp.h>
+#include <openssl/des.h>
 #include "utils.h"
 
 void lamont_hdump(unsigned char *bp, unsigned int length);
@@ -167,20 +169,50 @@ void Collapse(unsigned char *in, unsigned char *out)
     }
 }
 
-void DesEncrypt(unsigned char *clear, unsigned char *key, unsigned char *cipher)
-{
+void DesEncrypt(unsigned char *clear, unsigned char *key, unsigned char *cipher) {
     unsigned char des_key[8];
-    unsigned char crypt_key[66];
-    unsigned char des_input[66];
-
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    int ciphertext_len;
+    
+    // Generate the 8-byte DES key from the input key
     MakeKey(key, des_key);
-
-    Expand(des_key, crypt_key);
-    setkey((char *)crypt_key);
-
-    Expand(clear, des_input);
-    encrypt((char *)des_input, 0);
-    Collapse(des_input, cipher);
+    
+    // Create and initialize the context
+    ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        fprintf(stderr, "Error: Failed to create cipher context\n");
+        return;
+    }
+    
+    // Initialize the encryption operation
+    if (EVP_EncryptInit_ex(ctx, EVP_des_ecb(), NULL, des_key, NULL) != 1) {
+        fprintf(stderr, "Error: Failed to initialize encryption\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    
+    // Disable padding as we're working with exact block sizes
+    EVP_CIPHER_CTX_set_padding(ctx, 0);
+    
+    // Perform the encryption
+    if (EVP_EncryptUpdate(ctx, cipher, &len, clear, 8) != 1) {
+        fprintf(stderr, "Error: Failed to encrypt data\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    ciphertext_len = len;
+    
+    // Finalize the encryption
+    if (EVP_EncryptFinal_ex(ctx, cipher + len, &len) != 1) {
+        fprintf(stderr, "Error: Failed to finalize encryption\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    ciphertext_len += len;
+    
+    // Clean up
+    EVP_CIPHER_CTX_free(ctx);
 }
 
 int IsBlank(char *s)
