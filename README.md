@@ -1,5 +1,10 @@
 # asleap - recovers weak LEAP and PPTP passwords
 
+Archived. Please see [OscarakaElvis](https://github.com/OscarAkaElvis/asleap)'s fork for continued maintenance and features.
+
+-----
+
+
 Pronounced "asleep". Copyright(c) 2004-2020, [Joshua Wright](https://github.com/joswr1ght)
 
 -------------------------------------------------------------------------------
