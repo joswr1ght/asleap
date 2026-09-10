@@ -7,7 +7,7 @@
 # <dragorn> i think thats all anyone does
 # <dragorn> make is a twisted beast
 ##################################
-LDLIBS		= -lpcap -lxcrypt
+LDLIBS		= -lpcap
 CFLAGS		= -pipe -Wall -D_LINUX -D_OPENSSL_MD4
 LDLIBS		+= -lcrypto
 CFLAGS		+= -g3 #-ggdb -g
