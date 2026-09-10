@@ -185,55 +185,6 @@ struct dot11hdr_a4 {
 
 } __attribute__ ((packed));
 
-struct dot11_mgmt {
-    union {
-        struct {
-            uint16_t auth_algo;
-            uint16_t auth_transaction;
-            uint16_t status_code;
-            /* possibly followed by Challenge text */
-            uint8_t variable[0];
-        } __attribute__ ((packed)) auth;
-        struct {
-            uint16_t reason_code;
-        } __attribute__ ((packed)) deauth;
-        struct {
-            uint16_t capab_info;
-            uint16_t listen_interval;
-            /* followed by SSID and Supported rates */
-            uint8_t variable[0];
-        } __attribute__ ((packed)) assoc_req;
-        struct {
-            uint16_t capab_info;
-            uint16_t status_code;
-            uint16_t aid;
-            /* followed by Supported rates */
-            uint8_t variable[0];
-        } __attribute__ ((packed)) assoc_resp, reassoc_resp;
-        struct {
-            uint16_t capab_info;
-            uint16_t listen_interval;
-            uint8_t current_ap[6];
-            /* followed by SSID and Supported rates */
-            uint8_t variable[0];
-        } __attribute__ ((packed)) reassoc_req;
-        struct {
-            uint16_t reason_code;
-        } __attribute__ ((packed)) disassoc;
-        struct {
-            uint8_t variable[0];
-        } __attribute__ ((packed)) probe_req;
-        struct {
-            uint8_t timestamp[8];
-            uint16_t beacon_int;
-            uint16_t capab_info;
-            /* followed by some of SSID, Supported rates,
-             * FH Params, DS Params, CF Params, IBSS Params, TIM */
-            uint8_t variable[0];
-        } __attribute__ ((packed)) beacon;
-    } u;
-} __attribute__ ((packed));
-
 /* IEEE 802.11 fixed parameters */
 struct ieee80211_beacon_fixparm {
     uint8_t timestamp[8];

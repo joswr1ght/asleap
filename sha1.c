@@ -16,13 +16,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef _LINUX
-#warning "Assuming little-endian for Windows"
-#else
-#include <endian.h>
+#ifdef __GNU_LIBRARY__
+# include <endian.h>
 # if __BYTE_ORDER == __BIG_ENDIAN
 #  define WORDS_BIGENDIAN
 # endif
+#else
+# warning "Assuming little-endian for non-glibc (endian.h not available)"
 #endif
 
 #include "common.h"

@@ -7,35 +7,34 @@
 # <dragorn> i think thats all anyone does
 # <dragorn> make is a twisted beast
 ##################################
-LDLIBS		= -lpcap -lxcrypt
-CFLAGS		= -pipe -Wall -D_LINUX -D_OPENSSL_MD4
-LDLIBS		+= -lcrypto
-CFLAGS		+= -g3 #-ggdb -g
-PROGOBJ		= asleap.o genkeys.o utils.o common.o sha1.o
+CFLAGS		= -g3 -Og -std=gnu11 \
+		  -Wall -Wextra -Wpedantic -Wstrict-prototypes
+CPPFLAGS	= -D_FILE_OFFSET_BITS=64
+LDLIBS		= -lpcap
+
 PROG		= asleap genkeys
-#CC		    = clang-10
-CC          = gcc
+COMMON_OBJS	= common.o des.o des-tables.o md4.o sha1.o utils.o
 
-all: $(PROG) $(PROGOBJ)
+all: $(PROG)
 
-utils: utils.c utils.h
-	$(CC) $(CFLAGS) utils.c -c 
+asleap: asleap.o $(COMMON_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-common: common.c common.h
-	$(CC) $(CFLAGS) common.c -c
+genkeys: genkeys.o $(COMMON_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-sha1: sha1.c sha1.h
-	$(CC) $(CFLAGS) sha1.c -c
-
-asleap: asleap.c asleap.h sha1.o common.o common.h utils.o version.h sha1.c \
-	sha1.h 
-	$(CC) $(CFLAGS) asleap.c -o asleap common.o utils.o sha1.o $(LDLIBS)
-
-genkeys: genkeys.c md4.c md4.h common.o utils.o version.h common.h
-	$(CC) $(CFLAGS) md4.c genkeys.c -o genkeys common.o utils.o $(LDLIBS)
+asleap.o: asleap.c asleap.h utils.h common.h version.h sha1.h radiotap.h \
+ byteswap.h ieee80211.h ieee8021x.h ietfproto.h
+common.o: common.c common.h utils.h md4.h
+des.o: des.c des.h
+des-tables.o: des-tables.c des.h
+genkeys.o: genkeys.c common.h version.h utils.h
+sha1.o: sha1.c common.h sha1.h
+md4.o: md4.c md4.h
+utils.o: utils.c utils.h
 
 clean:
-	$(RM) $(PROGOBJ) $(PROG) *~
+	-rm -f $(PROG) asleap.o genkeys.o $(COMMON_OBJS)
 
 strip:
 	@ls -l $(PROG)

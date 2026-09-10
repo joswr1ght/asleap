@@ -7,35 +7,35 @@
 # <dragorn> i think thats all anyone does
 # <dragorn> make is a twisted beast
 ##################################
-WPDPACK		= ../WPdpack
-LDLIBS		= -L$(WPDPACK)/Lib -lwpcap -lcrypt -static
-CFLAGS		= -g3 -ggdb -pipe -Wall -I./cygwin -D_FILE_OFFSET_BITS=64
-CFLGAS      += -D_LARGEFILE_SOURCE
-PROGOBJ		= asleap.o genkeys.o utils.o common.o apeek.o sha1.o
-PROG		= asleap genkeys
 
-all: $(PROG) $(PROGOBJ)
+WPDPACK		= ../wpdpack
 
-apeek: apeek.c 
-	$(CC) $(CFLAGS) apeek.c -c
+CFLAGS		= -g3 -Og -std=gnu11 \
+		  -Wall -Wextra -Wpedantic -Wstrict-prototypes
+CPPFLAGS	= -D_FILE_OFFSET_BITS=64
+LDLIBS		= -L$(WPDPACK)/lib -lwpcap
 
-utils: utils.c utils.h
-	$(CC) $(CFLAGS) utils.c -c 
+PROG		= asleap.exe genkeys.exe
+COMMON_OBJS	= common.obj des.obj des-tables.obj md4.obj \
+                  sha1.obj utils.obj
 
-common: common.c common.h
-	$(CC) $(CFLAGS) common.c -c
+all: $(PROG)
 
-sha1: sha1.c sha1.h
-	$(CC) $(CFLAGS) sha1.c -c
+asleap.exe: asleap.obj $(COMMON_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-asleap: asleap.c asleap.h sha1.o common.o common.h utils.o apeek.o \
-        version.h sha1.c sha1.h apeek.h
-	$(CC) $(CFLAGS) asleap.c -o asleap \
-        common.o utils.o apeek.o sha1.o $(LDLIBS)
+genkeys.exe: genkeys.obj $(COMMON_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-genkeys: genkeys.c md4.c md4.h common.o utils.o
-	$(CC) $(CFLAGS) md4.c genkeys.c -o genkeys \
-		common.o utils.o -lcrypt
+asleap.obj: asleap.c asleap.h utils.h common.h version.h sha1.h radiotap.h \
+ byteswap.h ieee80211.h ieee8021x.h ietfproto.h
+common.obj: common.c common.h utils.h md4.h
+des.obj: des.c des.h
+des-tables.obj: des-tables.c des.h
+genkeys.obj: genkeys.c common.h version.h utils.h
+sha1.obj: sha1.c common.h sha1.h
+md4.obj: md4.c md4.h
+utils.obj: utils.c utils.h
 
 clean:
-	$(RM) $(PROGOBJ) $(PROG) asleap.exe genkeys.exe *~
+	-$(RM) -f $(PROG) asleap.obj genkeys.obj $(COMMON_OBJS)

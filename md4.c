@@ -118,9 +118,7 @@ MD4_CTX *MDp;
 ** Does not update MDp->count.
 ** This routine is not user-callable.
 */
-static void MDblock(MDp, Xb)
-MD4_CTX *MDp;
-unsigned char *Xb;
+static void MDblock(MD4_CTX *MDp, unsigned char *Xb)
 {
     register unsigned int tmp, A, B, C, D;
     unsigned int X[16];
